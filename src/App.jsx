@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import "./index.css";
+import { Analytics } from "@vercel/analytics/react";
 import {
   BrowserRouter,
   Navigate,
@@ -23,6 +24,7 @@ function App() {
         <Route path="/tasks" exact element={<Dashboard />} />
         <Route path="*" element={<Navigate to="/tasks" />} />
       </Routes>
+      <Analytics />
     </>
   );
 }
