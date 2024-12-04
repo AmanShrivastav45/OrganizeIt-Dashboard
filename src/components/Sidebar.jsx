@@ -45,17 +45,16 @@ const Sidebar = () => {
 
   return (
     <div className="relative">
-      {/* Toggle Button */}
       <button
         onClick={toggleSidebar}
-        className="fixed top-4 right-4 z-50 text-[#2a2a2a] border-2 border-[#e6e4e4] bg-gray-50 rounded-full p-2 md:hidden"
+        className="fixed top-4 right-4 z-50 text-[#2a2a2a] border-2 border-[#e6e4e4] bg-gray-50 rounded-full p-2 xl:hidden"
       >
         {isOpen ? <IoClose size={24} /> : <HiMenuAlt2 size={24} />}
       </button>
       <aside
         className={`fixed flex flex-col justify-between top-0 left-0 h-full bg-white border-2 border-[#EDEDEE] text-[#2e2e2e] transform ${
           isOpen ? "translate-x-0" : "-translate-x-full"
-        } md:translate-x-0 w-[240px] transition-transform duration-300 z-40`}
+        } xl:translate-x-0 w-[240px] transition-transform duration-300 z-40`}
       >
         <div>
           <div className="p-3">
@@ -127,7 +126,7 @@ const Sidebar = () => {
       {isOpen && (
         <div
           onClick={toggleSidebar}
-          className="fixed inset-0 bg-black bg-opacity-50 z-30 md:hidden"
+          className="fixed inset-0 bg-black bg-opacity-50 z-30 xl:hidden"
         ></div>
       )}
     </div>

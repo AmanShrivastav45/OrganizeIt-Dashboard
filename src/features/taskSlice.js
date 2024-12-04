@@ -1,118 +1,73 @@
-// src/features/tasks/tasksSlice.js
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = {
-  categories: [
+const taskSlice = createSlice({
+  name: "tasks",
+
+  initialState: [
     {
       id: 1,
-      category: "IN PROGRESS",
-      count: 2,
-      isOpen: true,
-      tasks: [
-        {
-          id: 1,
-          name: "One-on-One Meeting",
-          priority: "High",
-          dueDate: "Today",
-        },
-        {
-          id: 2,
-          name: "Send a summary email to stakeholders",
-          priority: "Low",
-          dueDate: "3 days left",
-        },
-      ],
+      title: "Add tests to homepage",
+      priority: "High",
+      dueDate: "2023-10-15",
+      status: "Upcoming",
     },
     {
       id: 2,
-      category: "TO DO",
-      count: 1,
-      isOpen: false,
-      tasks: [
-        {
-          id: 3,
-          name: "Prepare project report",
-          priority: "Med",
-          dueDate: "5 days left",
-        },
-      ],
+      title: "Fix styling in about section",
+      priority: "Med",
+      dueDate: "2023-10-20",
+      status: "In Progress",
     },
     {
       id: 3,
-      category: "UPCOMING",
-      count: 1,
-      isOpen: false,
-      tasks: [
-        {
-          id: 4,
-          name: "Plan quarterly team meeting",
-          priority: "Low",
-          dueDate: "Next week",
-        },
-      ],
+      title: "Learn how to center a div",
+      priority: "Low",
+      dueDate: "2023-10-25",
+      status: "Upcoming",
+    },
+    {
+      id: 4,
+      title: "Implement Redux in the project",
+      priority: "High",
+      dueDate: "2023-10-30",
+      status: "Upcoming",
+    },
+    {
+      id: 5,
+      title: "Write documentation for the project",
+      priority: "Med",
+      dueDate: "2023-11-05",
+      status: "Completed",
     },
   ],
-};
-
-const tasksSlice = createSlice({
-  name: "tasks",
-  initialState,
   reducers: {
     addTask: (state, action) => {
-      const { categoryId, task } = action.payload;
-      const category = state.categories.find(cat => cat.id === categoryId);
-      if (category) {
-        category.tasks.push(task);
-        category.count++;
-      }
+      state.push(action.payload);
     },
     editTask: (state, action) => {
-      const { taskId, updatedTask } = action.payload;
-      for (const category of state.categories) {
-        const taskIndex = category.tasks.findIndex(task => task.id === taskId);
-        if (taskIndex !== -1) {
-          category.tasks[taskIndex] = { ...category.tasks[taskIndex], ...updatedTask };
-          break;
-        }
+      const index = state.findIndex((task) => task.id === action.payload.id);
+      if (index !== -1) {
+        state[index] = { ...state[index], ...action.payload };
       }
     },
     deleteTask: (state, action) => {
-      const { taskId } = action.payload;
-      for (const category of state.categories) {
-        const taskIndex = category.tasks.findIndex(task => task.id === taskId);
-        if (taskIndex !== -1) {
-          category.tasks.splice(taskIndex, 1);
-          category.count--;
-          break;
-        }
-      }
+      return state.filter((task) => task.id !== action.payload);
     },
-    toggleTaskCompletion: (state, action) => {
-      const { taskId } = action.payload;
-      for (const category of state.categories) {
-        const task = category.tasks.find(task => task.id === taskId);
-        if (task) {
-          task.completed = !task.completed;
-          break;
-        }
-      }
-    },
-    toggleCategoryOpen: (state, action) => {
-      const { categoryId } = action.payload;
-      const category = state.categories.find(cat => cat.id === categoryId);
-      if (category) {
-        category.isOpen = !category.isOpen;
-      }
+    reorderTasks: (state, action) => {
+      const { oldIndex, newIndex } = action.payload;
+
+      // Move the task in the array
+      const [movedTask] = state.splice(oldIndex, 1);
+      state.splice(newIndex, 0, movedTask);
+
+      // Update the sequence values
+      state.forEach((task, index) => {
+        task.sequence = index + 1; // Update sequence based on new order
+      });
     },
   },
 });
 
-export const {
-  addTask,
-  editTask,
-  deleteTask,
-  toggleTaskCompletion,
-  toggleCategoryOpen,
-} = tasksSlice.actions;
-
-export default tasksSlice.reducer;
+export const { addTask, editTask, deleteTask, reorderTasks } =
+  taskSlice.actions;
+export default taskSlice.reducer;
